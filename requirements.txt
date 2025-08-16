@@ -1,0 +1,26 @@
+# Dependências principais do projeto
+# Este arquivo será instalado automaticamente pelo activate.bat
+
+# Framework web
+Flask==2.3.3
+Flask-Cors==4.0.0
+Werkzeug==2.3.7
+
+# Processamento de documentos
+python-docx==0.8.11
+pdfplumber==0.9.0
+reportlab==4.0.4
+markdown==3.5.1
+beautifulsoup4==4.12.2
+
+# Utilitários
+Pillow==10.0.1
+lxml==4.9.3
+html5lib==1.1
+
+# Segurança e validação
+markupsafe==2.1.3
+
+# Dependências opcionais para conversão avançada
+# pypandoc
+# python-magic-bin

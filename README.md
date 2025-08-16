@@ -141,12 +141,14 @@ bandit -r . -f json
 ```bash
 # Clone o repositório
 git clone https://github.com/felixskmarcio/conversor-universal-python/tree/master
-cd "Conversor universal em python"
+cd "conversor-universal-python-master"
 
 # Configuração automática (recomendado)
-./setup.sh  # Linux/Mac
+./scripts/setup.sh    # Linux/Mac
 # ou
-setup.bat   # Windows
+.\activate.bat        # Windows (com sistema de debug avançado)
+# ou
+.\scripts\setup.bat   # Windows (setup básico)
 ```
 
 ### 📦 Instalação Manual
@@ -186,6 +188,40 @@ setup.bat   # Windows
    # Gerar chave secreta
    python -c "import secrets; print(secrets.token_hex(32))"
    ```
+
+## 🔍 Sistema de Debug Avançado (Windows)
+
+O projeto inclui um sistema de debug avançado através do script `activate.bat`:
+
+### ✨ Funcionalidades do Debug
+- **📋 Logging Detalhado**: Todos os passos são registrados em `setup_debug.log`
+- **🎨 Interface Visual**: Cores e formatação para melhor visualização
+- **⏸️ Pausas Estratégicas**: Pausas opcionais entre etapas para análise
+- **🔧 Verificação de Ferramentas**: Validação automática de winget, Python, Node.js e npm
+- **📦 Gestão de Dependências**: Instalação e verificação inteligente de dependências
+- **🚨 Tratamento de Erros**: Captura e logging detalhado de erros
+
+### 📊 Estrutura do Log
+O arquivo `setup_debug.log` contém:
+1. **Inicialização**: Timestamp e configurações iniciais
+2. **Verificação de Ferramentas**: Status de cada ferramenta do sistema
+3. **Configuração Python**: Instalação e configuração do ambiente Python
+4. **Configuração Frontend**: Setup do ambiente Node.js/Next.js
+5. **Finalização**: Resumo e instruções finais
+
+### 🛠️ Como Usar
+```bash
+# Executar com debug completo
+.\activate.bat
+
+# Verificar logs após execução
+type setup_debug.log
+```
+
+### 📚 Documentação Adicional
+- `DEBUG_README.md` - Guia detalhado do sistema de debug
+- `SISTEMA_DEBUG_COMPLETO.md` - Documentação técnica completa
+- `test_debug.bat` - Script de teste do sistema de debug
 
 4. **Inicialização**
    ```bash
@@ -285,8 +321,8 @@ graph TB
 #### Core Dependencies
 ```python
 Flask==2.3.3              # Framework web principal
+Flask-Cors                # CORS support
 Werkzeug==2.3.7           # WSGI utilities
-Jinja2==3.1.2             # Template engine
 ```
 
 #### Document Processing
@@ -296,26 +332,28 @@ pdfplumber==0.9.0         # Extração PDF
 reportlab==4.0.4          # Geração PDF
 markdown==3.5.1           # Processamento Markdown
 beautifulsoup4==4.12.2    # Parsing HTML
+pypandoc                  # Conversão avançada (opcional)
+python-magic-bin          # Detecção de tipos de arquivo
 ```
 
-#### Security & Validation
+#### Utilities & Processing
 ```python
-WTF-Forms==1.1.1          # Validação de formulários
-Flask-Limiter==3.5.0      # Rate limiting
-cryptography==41.0.4      # Criptografia
+Pillow==10.0.1            # Processamento de imagens
+lxml==4.9.3               # XML/HTML parsing
+html5lib==1.1             # HTML5 parsing
+markupsafe==2.1.3         # Segurança e validação
 ```
 
-#### Production
-```python
-gunicorn==21.2.0          # WSGI server
-redis==5.0.0              # Cache e sessões
-celery==5.3.1             # Processamento assíncrono
+#### External Dependencies
+```bash
+# pandoc - https://pandoc.org/installing.html
+# Instalar separadamente se necessário para conversões avançadas
 ```
 
 ## 📁 Estrutura do Projeto
 
 ```
-Conversor universal em python/
+conversor-universal-python-master/
 ├── 📁 backend/                    # Backend Flask
 │   ├── app.py                     # Aplicação principal
 │   ├── config.py                  # Configurações
@@ -360,6 +398,11 @@ Conversor universal em python/
 │   ├── setup.sh                   # Setup Linux/Mac
 │   ├── setup.bat                  # Setup Windows
 │   └── deploy.sh                  # Script de deploy
+├── activate.bat                   # Setup Windows com debug avançado
+├── test_debug.bat                 # Script de teste do sistema de debug
+├── DEBUG_README.md                # Documentação do sistema de debug
+├── SISTEMA_DEBUG_COMPLETO.md      # Documentação técnica completa
+├── CLAUDE.md                      # Guia para Claude AI
 ├── .gitignore                     # Arquivos ignorados
 ├── .env.example                   # Variáveis de ambiente
 ├── LICENSE                        # Licença MIT
@@ -844,7 +887,25 @@ SOFTWARE.
 
 ---
 
-**Desenvolvido com ❤️ em Python | Mantido pela Comunidade**
+## 🆕 Atualizações Recentes
+
+### v2024.1 - Sistema de Debug Avançado
+- ✅ **Novo Script `activate.bat`**: Setup automatizado com sistema de debug completo
+- ✅ **Logging Detalhado**: Arquivo `setup_debug.log` com rastreamento completo
+- ✅ **Interface Visual Aprimorada**: Cores e formatação para melhor experiência
+- ✅ **Verificação Inteligente**: Validação automática de ferramentas e dependências
+- ✅ **Tratamento de Erros**: Captura e resolução automática de problemas comuns
+- ✅ **Documentação Expandida**: Guias detalhados para debug e troubleshooting
+
+### Próximas Funcionalidades
+- 🔄 **API v2**: Endpoints aprimorados com autenticação JWT
+- 🔄 **Processamento Assíncrono**: Conversões em background com Celery
+- 🔄 **Cache Inteligente**: Sistema de cache com Redis
+- 🔄 **Monitoramento**: Métricas e alertas com Prometheus
+
+---
+
+**Desenvolvido com ❤️ para a comunidade de desenvolvedores**
 
 *"Transformando documentos, conectando pessoas"*
 

@@ -4,9 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Common Development Commands
 
+### Quick Setup (Recommended)
+```bash
+# Windows - Automated setup with debug mode
+.\activate.bat              # Complete setup with debug logging
+
+# Linux/Mac - Automated setup
+./scripts/setup.sh          # Complete setup script
+```
+
 ### Backend (Python Flask)
 ```bash
-# Development setup
+# Manual development setup
 python -m venv .venv
 source .venv/bin/activate  # Linux/Mac
 .venv\Scripts\activate.bat  # Windows
@@ -17,9 +26,9 @@ cd backend
 python app.py  # Starts on http://localhost:5000
 
 # Alternative startup methods
-python scripts/setup.sh    # Linux/Mac automated setup
-python scripts/setup.bat   # Windows automated setup  
-iniciar.bat                 # Windows quick start
+./scripts/setup.sh          # Linux/Mac automated setup
+./scripts/setup.bat         # Windows automated setup
+.\activate.bat              # Windows with debug mode
 ```
 
 ### Frontend (Next.js)
@@ -112,11 +121,13 @@ The core converter supports bidirectional conversion between:
 - **python-magic-bin** - File type detection
 
 #### Node Dependencies (`package.json`)
-- **Next.js 15.4.4** with **React 19**
-- **@radix-ui components** - Accessible UI primitives
-- **Tailwind CSS 4** - Styling framework
-- **Lucide React** - Icon library
-- **React Dropzone** - File upload handling
+- **Next.js 15.4.4** with **React 19.1.0**
+- **@radix-ui components** - Accessible UI primitives (dropdown-menu, label, progress, separator, slot)
+- **Tailwind CSS 4** with **@tailwindcss/typography** - Styling framework
+- **Lucide React 0.526.0** - Icon library
+- **React Dropzone 14.3.8** - File upload handling
+- **Class Variance Authority** - Component styling utilities
+- **Tailwindcss Animate** - Animation utilities
 
 ## Development Guidelines
 
@@ -141,8 +152,20 @@ The frontend can integrate with backend via:
 ### Environment Configuration
 - Use `.env` files for environment variables
 - **Development**: Automatic setup via `scripts/setup.sh` or `scripts/setup.bat`
+- **Windows Debug Mode**: Use `activate.bat` for enhanced debugging with detailed logging
 - **Production**: Use Docker with environment variables
 - **Configuration classes**: `DevelopmentConfig`, `ProductionConfig`, `TestingConfig` in `config.py`
+
+### Debug System (Windows)
+The `activate.bat` script includes an advanced debug system:
+- **Debug Logging**: Detailed logs saved to `setup_debug.log`
+- **Visual Progress**: Color-coded output with step-by-step progress
+- **Strategic Pauses**: Optional pauses between steps for better visibility
+- **Error Tracking**: Comprehensive error logging and troubleshooting
+- **Tool Verification**: Automatic verification of winget, Python, Node.js, and npm
+- **Dependency Management**: Smart installation and verification of project dependencies
+
+For more details, see `DEBUG_README.md` and `SISTEMA_DEBUG_COMPLETO.md`
 
 ## Integration Points
 
