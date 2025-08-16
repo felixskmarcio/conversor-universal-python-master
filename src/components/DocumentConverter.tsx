@@ -4,12 +4,14 @@ import { useState, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { FileUpload, FileWithPreview } from '@/components/ui/file-upload'
+import { FileUploadCorrected, FileWithPreview } from '@/components/ui/file-upload-corrected'
 import { LoadingAdvanced } from '@/components/ui/loading-advanced'
-import { FormatSelector } from '@/components/FormatSelector'
-import { ConversionResult } from '@/components/ConversionResult'
-import { useDocumentConverter, FileFormat } from '@/hooks/useDocumentConverter'
-import { Upload, RefreshCw } from 'lucide-react'
+import { Upload, RefreshCw, FileText, FileCode, FileImage, FileType, CheckCircle, Download, AlertCircle } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { useToastContext } from '@/components/ToastProvider'
+import { useDocumentConverter } from '@/hooks/useDocumentConverter'
+import type { FileFormat } from '@/hooks/useDocumentConverter'
 
 interface DocumentConverterProps {
   className?: string
@@ -85,7 +87,7 @@ export function DocumentConverter({ className }: DocumentConverterProps) {
         
         <CardContent className="space-y-8">
           {/* File Upload Component */}
-          <FileUpload
+          <FileUploadCorrected
             onFilesSelected={onFilesSelected}
             maxFiles={1}
             maxSize={16 * 1024 * 1024}
@@ -103,10 +105,24 @@ export function DocumentConverter({ className }: DocumentConverterProps) {
                 </Label>
               </div>
               
-              <FormatSelector
-                selectedFormat={targetFormat}
-                onFormatChange={setTargetFormat}
-              />
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {(['pdf', 'docx', 'txt', 'html', 'md'] as FileFormat[]).map((format) => (
+                  <Button
+                    key={format}
+                    variant={targetFormat === format ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setTargetFormat(format)}
+                    className="flex flex-col items-center gap-2 h-auto py-3"
+                  >
+                    {format === 'pdf' && <FileText className="w-5 h-5" />}
+                    {format === 'docx' && <FileType className="w-5 h-5" />}
+                    {format === 'txt' && <FileCode className="w-5 h-5" />}
+                    {format === 'html' && <FileImage className="w-5 h-5" />}
+                    {format === 'md' && <FileCode className="w-5 h-5" />}
+                    <span className="text-xs font-medium uppercase">{format}</span>
+                  </Button>
+                ))}
+              </div>
 
               {/* Convert Button */}
               <div className="pt-4">
@@ -140,10 +156,42 @@ export function DocumentConverter({ className }: DocumentConverterProps) {
 
           {/* Result Display */}
           {result && (
-            <ConversionResult
-              result={result}
-              onDownload={handleDownload}
-            />
+            <Card className="border-2 border-dashed border-border/50 bg-background/50">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {result.success ? (
+                      <CheckCircle className="w-6 h-6 text-green-500" />
+                    ) : (
+                      <AlertCircle className="w-6 h-6 text-red-500" />
+                    )}
+                    <div>
+                      <p className={`font-medium ${
+                        result.success ? 'text-green-700' : 'text-red-700'
+                      }`}>
+                        {result.message}
+                      </p>
+                      {result.filename && (
+                        <p className="text-sm text-muted-foreground">
+                          Arquivo: {result.filename}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {result.success && result.downloadUrl && (
+                    <Button
+                      onClick={handleDownload}
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-2"
+                    >
+                      <Download className="w-4 h-4" />
+                      Baixar
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           )}
         </CardContent>
       </Card>

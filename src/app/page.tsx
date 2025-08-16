@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
 import { FileUpload, FileWithPreview } from '@/components/ui/file-upload'
+import { FileUploadFixed } from '@/components/FileUploadFixed'
+import { DocumentConverter } from '@/components/DocumentConverter'
+
 import { LoadingAdvanced, LoadingStates } from '@/components/ui/loading-advanced'
 import { GradientMeshHero } from '@/components/ui/gradient-mesh'
 import {
@@ -291,6 +294,8 @@ export default function ConversorPage() {
             </ScrollReveal>
           </ParallaxSection>
 
+
+
           {/* Converter Section - Enhanced */}
           <ParallaxSection speed={0.3} className="py-12 sm:py-16 lg:py-20 px-4" data-section="converter">
             <ScrollReveal delay={200}>
@@ -312,15 +317,16 @@ export default function ConversorPage() {
                   </CardHeader>
                   
                   <CardContent className="space-y-8">
-                    {/* File Upload Component */}
-                    <FileUpload
+                    {/* File Upload Component - Versão Corrigida */}
+                    <FileUploadFixed
                       onFilesSelected={onFilesSelected}
                       maxFiles={1}
                       maxSize={16 * 1024 * 1024}
-                      showPreview={false}
+                      showPreview={true}
                       supportedFormats={['PDF', 'DOCX', 'TXT', 'HTML', 'Markdown']}
                       className="rounded-xl"
                     />
+
 
                     {/* Format Selection - Enhanced */}
                     {selectedFiles.length > 0 && (
