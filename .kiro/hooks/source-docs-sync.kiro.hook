@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "name": "Source to Docs Sync",
+  "description": "Monitors all source files in the repository (Python backend, TypeScript frontend, and configuration files) and triggers documentation updates in README.md and /docs folder when changes are detected.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "backend/**/*.py",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "*.ts",
+      "*.py",
+      "*.json",
+      "*.yml",
+      "*.yaml",
+      "docker/**/*",
+      "scripts/**/*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Source code has been modified in this full-stack document conversion application. Please review the changes and update the documentation accordingly:\n\n1. Update README.md if the changes affect:\n   - Installation or setup procedures\n   - Usage instructions\n   - Feature descriptions\n   - API endpoints or functionality\n\n2. Update relevant files in the /docs folder:\n   - API.md for backend API changes\n   - DEPLOYMENT.md for infrastructure or deployment changes\n   - SECURITY.md for security-related modifications\n   - CONTRIBUTING.md for development workflow changes\n\nFocus on keeping documentation accurate, clear, and synchronized with the current codebase. Ensure that both technical implementation details and user-facing features are properly documented."
+  }
+}
