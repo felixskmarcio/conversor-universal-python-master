@@ -174,12 +174,12 @@ export default function StatsSection() {
                   {/* Card com altura padronizada */}
                   <div 
                     className="relative p-6 sm:p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-gray-200 overflow-hidden cursor-pointer h-[320px] flex flex-col justify-between"
-                    onClick={() => window.open('https://github.com/felixskmarcio/conversor-universal-python', '_blank')}
+                    onClick={() => window.open('https://github.com/felixskmarcio/conversor-universal-python-master', '_blank')}
                   >
                     {/* Background Gradient */}
                     <div 
                       className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 cursor-pointer`}
-                      onClick={() => window.open('https://github.com/felixskmarcio/conversor-universal-python', '_blank')}
+                      onClick={() => window.open('https://github.com/felixskmarcio/conversor-universal-python-master', '_blank')}
                     />
                     
                     {/* Header com ícone e badge */}

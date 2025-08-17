@@ -140,7 +140,7 @@ bandit -r . -f json
 
 ```bash
 # Clone o repositório
-git clone https://github.com/felixskmarcio/conversor-universal-python/tree/master
+git clone https://github.com/felixskmarcio/conversor-universal-python-master
 cd "conversor-universal-python-master"
 
 # Configuração automática (recomendado)

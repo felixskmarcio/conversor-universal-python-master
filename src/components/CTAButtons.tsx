@@ -27,7 +27,7 @@ export function CTAButtons({
   }
 
   const handleGitHubClick = () => {
-    window.open('https://github.com/felixskmarcio/conversor-universal-python', '_blank')
+    window.open('https://github.com/felixskmarcio/conversor-universal-python-master', '_blank')
   }
 
   if (variant === 'mobile') {

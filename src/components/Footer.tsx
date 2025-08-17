@@ -47,7 +47,7 @@ const quickStats = [
 ]
 
 const socialLinks = [
-  { icon: Github, href: 'https://github.com/felixskmarcio/conversor-universal-python', label: 'GitHub', color: 'hover:text-gray-900' },
+  { icon: Github, href: 'https://github.com/felixskmarcio/conversor-universal-python-master', label: 'GitHub', color: 'hover:text-gray-900' },
   { icon: Twitter, href: '#', label: 'Twitter', color: 'hover:text-blue-500' },
   { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:text-blue-600' },
   { icon: Mail, href: '#', label: 'Email', color: 'hover:text-red-500' }

@@ -14,6 +14,7 @@ Features:
 
 import os
 import re
+import shutil
 import tempfile
 from pathlib import Path
 from flask import Flask, jsonify, request, send_file, render_template_string
@@ -431,6 +432,8 @@ class ConversorUniversalMelhorado:
         """Escreve texto em formato DOCX com formatação baseada na estrutura"""
         if not Document:
             raise ImportError("python-docx não está instalado")
+        
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
         
         estrutura = self._detectar_estrutura_documento(texto)
         doc = Document()
