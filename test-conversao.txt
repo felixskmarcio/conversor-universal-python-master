@@ -1,0 +1,18 @@
+Teste de conversão de documentos - Conversor Universal
+
+Este é um arquivo de teste para validar a funcionalidade de conversão.
+
+## Estrutura de Teste:
+- Título: Teste de Conversão
+- Parágrafos: Múltiplos parágrafos de texto
+- Formatação: Texto simples com quebras de linha
+
+## Conteúdo de Teste:
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+## Finalização:
+Este arquivo será usado para testar a conversão entre diferentes formatos de documento.
