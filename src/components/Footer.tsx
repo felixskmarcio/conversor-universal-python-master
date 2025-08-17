@@ -54,7 +54,7 @@ const socialLinks = [
 ]
 
 const quickLinks = [
-  { name: 'Converter Documentos', href: '#converter' },
+  { name: 'Converter Documentos', href: '[data-section="converter"]' },
   { name: 'Estatísticas', href: '#stats' },
   { name: 'Recursos', href: '#features' }
 ]

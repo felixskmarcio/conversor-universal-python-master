@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 import { useParallax, useIntersectionObserver } from '@/hooks/useParallax'
 import { cn } from '@/lib/utils'
 
-interface ParallaxSectionProps {
+interface ParallaxSectionProps extends React.HTMLAttributes<HTMLElement> {
   children: ReactNode
   speed?: number
   direction?: 'up' | 'down'
@@ -25,7 +25,8 @@ export function ParallaxSection({
   backgroundImage,
   overlay = false,
   overlayOpacity = 0.5,
-  enableAnimation = true
+  enableAnimation = true,
+  ...rest
 }: ParallaxSectionProps) {
   const { ref: parallaxRef, transform } = useParallax({ speed, direction, offset })
   const { ref: intersectionRef, isIntersecting } = useIntersectionObserver({
@@ -42,6 +43,7 @@ export function ParallaxSection({
   return (
     <section
       ref={setRefs}
+      {...rest}
       className={cn(
         'relative overflow-hidden',
         enableAnimation && 'transition-all duration-1000 ease-out',

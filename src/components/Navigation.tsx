@@ -7,7 +7,7 @@ export const navigationItems = [
   {
     id: 'converter',
     label: 'Converter',
-    href: '#converter',
+    href: '[data-section="converter"]',
     description: 'Converter Documentos'
   },
   {
