@@ -23,9 +23,9 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 
-4. **Run tests:**
+4. **Verify installation:**
 ```bash
-pytest
+python backend/app.py
 ```
 
 ### Project Structure
@@ -36,7 +36,7 @@ conversor-universal-python/
 │   ├── api/              # API routes and endpoints
 │   ├── core/             # Business logic
 │   ├── models/           # Data models
-│   └── tests/            # Backend tests
+│   └── utils/            # Backend utilities
 ├── src/                  # Frontend Next.js application
 │   ├── app/              # App router pages
 │   ├── components/       # React components

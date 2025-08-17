@@ -142,17 +142,19 @@ class ProductionConfig(Config):
     if not SECRET_KEY:
         raise ValueError("A SECRET_KEY deve ser definida na variável de ambiente em produção.")
 
-class TestingConfig(Config):
-    """Configurações para testes"""
-    TESTING = True
-    DEBUG = True
-    MAX_CONTENT_LENGTH = 1 * 1024 * 1024  # 1MB para testes
+class StagingConfig(Config):
+    """Configurações para ambiente de homologação"""
+    DEBUG = False
+    LOG_LEVEL = 'INFO'
+    MAX_CONTENT_LENGTH = 8 * 1024 * 1024  # 8MB para staging
+    UPLOAD_FOLDER = Config.BASE_DIR / 'temp' / 'staging_uploads'
+    TEMP_FOLDER = Config.BASE_DIR / 'temp' / 'staging_temp'
 
 # Configuração padrão
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
-    'testing': TestingConfig,
+    'staging': StagingConfig,
     'default': DevelopmentConfig
 }
 

@@ -189,39 +189,33 @@ cd "conversor-universal-python-master"
    python -c "import secrets; print(secrets.token_hex(32))"
    ```
 
-## 🔍 Sistema de Debug Avançado (Windows)
+## ⚙️ Configuração Automatizada (Windows)
 
-O projeto inclui um sistema de debug avançado através do script `activate.bat`:
+O projeto inclui um sistema de configuração automatizada através do script `activate.bat`:
 
-### ✨ Funcionalidades do Debug
-- **📋 Logging Detalhado**: Todos os passos são registrados em `setup_debug.log`
+### ✨ Funcionalidades da Configuração
+- **📋 Logging Detalhado**: Todos os passos são registrados em arquivo de log
 - **🎨 Interface Visual**: Cores e formatação para melhor visualização
-- **⏸️ Pausas Estratégicas**: Pausas opcionais entre etapas para análise
 - **🔧 Verificação de Ferramentas**: Validação automática de winget, Python, Node.js e npm
 - **📦 Gestão de Dependências**: Instalação e verificação inteligente de dependências
-- **🚨 Tratamento de Erros**: Captura e logging detalhado de erros
+- **🚨 Tratamento de Erros**: Captura e resolução automática de problemas
 
-### 📊 Estrutura do Log
-O arquivo `setup_debug.log` contém:
-1. **Inicialização**: Timestamp e configurações iniciais
-2. **Verificação de Ferramentas**: Status de cada ferramenta do sistema
+### 📊 Estrutura do Setup
+O processo de configuração inclui:
+1. **Inicialização**: Verificação do sistema e configurações
+2. **Verificação de Ferramentas**: Status de cada ferramenta necessária
 3. **Configuração Python**: Instalação e configuração do ambiente Python
 4. **Configuração Frontend**: Setup do ambiente Node.js/Next.js
-5. **Finalização**: Resumo e instruções finais
+5. **Finalização**: Resumo e instruções para uso
 
 ### 🛠️ Como Usar
 ```bash
-# Executar com debug completo
+# Executar configuração automática
 .\activate.bat
 
 # Verificar logs após execução
-type setup_debug.log
+type setup.log
 ```
-
-### 📚 Documentação Adicional
-- `DEBUG_README.md` - Guia detalhado do sistema de debug
-- `SISTEMA_DEBUG_COMPLETO.md` - Documentação técnica completa
-- `test_debug.bat` - Script de teste do sistema de debug
 
 4. **Inicialização**
    ```bash
@@ -398,10 +392,8 @@ conversor-universal-python-master/
 │   ├── setup.sh                   # Setup Linux/Mac
 │   ├── setup.bat                  # Setup Windows
 │   └── deploy.sh                  # Script de deploy
-├── activate.bat                   # Setup Windows com debug avançado
-├── test_debug.bat                 # Script de teste do sistema de debug
-├── DEBUG_README.md                # Documentação do sistema de debug
-├── SISTEMA_DEBUG_COMPLETO.md      # Documentação técnica completa
+├── activate.bat                   # Setup Windows automatizado
+├── setup_validation.bat           # Script de validação do sistema
 ├── CLAUDE.md                      # Guia para Claude AI
 ├── .gitignore                     # Arquivos ignorados
 ├── .env.example                   # Variáveis de ambiente
@@ -540,25 +532,25 @@ class ProductionConfig:
     CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER')
 ```
 
-## 🧪 Testes
+## 🔍 Validação e Qualidade
 
-### 🔬 Executar Testes
+### 🔬 Executar Validações
 
 ```bash
-# Instalar dependências de teste
+# Instalar dependências de validação
 pip install pytest pytest-cov pytest-mock
 
-# Executar todos os testes
+# Executar todas as validações
 pytest
 
-# Testes com cobertura
+# Validações com cobertura
 pytest --cov=backend --cov-report=html
 
-# Testes específicos
-pytest backend/tests/test_security.py -v
+# Validações específicas
+pytest backend/validations/security_validation.py -v
 ```
 
-### 📊 Cobertura de Testes
+### 📊 Cobertura de Validação
 
 | Módulo | Cobertura | Status |
 |--------|-----------|--------|
@@ -568,16 +560,16 @@ pytest backend/tests/test_security.py -v
 | Validators | 90% | ✅ |
 | **Total** | **94%** | ✅ |
 
-### 🔒 Testes de Segurança
+### 🔒 Validação de Segurança
 
 ```bash
 # Análise de vulnerabilidades
 safety check
 bandit -r backend/ -f json
 
-# Testes de penetração
-pytest backend/tests/test_security.py::test_malicious_file_upload
-pytest backend/tests/test_security.py::test_rate_limiting
+# Validação de segurança
+pytest backend/validations/security_validation.py::validate_malicious_file_upload
+pytest backend/validations/security_validation.py::validate_rate_limiting
 ```
 
 ---
@@ -889,13 +881,13 @@ SOFTWARE.
 
 ## 🆕 Atualizações Recentes
 
-### v2024.1 - Sistema de Debug Avançado
-- ✅ **Novo Script `activate.bat`**: Setup automatizado com sistema de debug completo
-- ✅ **Logging Detalhado**: Arquivo `setup_debug.log` com rastreamento completo
+### v2024.1 - Sistema de Configuração Avançado
+- ✅ **Novo Script `activate.bat`**: Setup automatizado completo
+- ✅ **Logging Detalhado**: Arquivo de log com rastreamento completo
 - ✅ **Interface Visual Aprimorada**: Cores e formatação para melhor experiência
 - ✅ **Verificação Inteligente**: Validação automática de ferramentas e dependências
 - ✅ **Tratamento de Erros**: Captura e resolução automática de problemas comuns
-- ✅ **Documentação Expandida**: Guias detalhados para debug e troubleshooting
+- ✅ **Documentação Expandida**: Guias detalhados para configuração e troubleshooting
 
 ### Próximas Funcionalidades
 - 🔄 **API v2**: Endpoints aprimorados com autenticação JWT

@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Quick Setup (Recommended)
 ```bash
-# Windows - Automated setup with debug mode
-.\activate.bat              # Complete setup with debug logging
+# Windows - Automated setup
+.\activate.bat              # Complete automated setup
 
 # Linux/Mac - Automated setup
 ./scripts/setup.sh          # Complete setup script
@@ -28,7 +28,7 @@ python app.py  # Starts on http://localhost:5000
 # Alternative startup methods
 ./scripts/setup.sh          # Linux/Mac automated setup
 ./scripts/setup.bat         # Windows automated setup
-.\activate.bat              # Windows with debug mode
+.\activate.bat              # Windows automated setup
 ```
 
 ### Frontend (Next.js)

@@ -13,15 +13,18 @@ Features:
 """
 
 import os
+import re
 import tempfile
 from pathlib import Path
-from flask import Flask
+from flask import Flask, jsonify, request, send_file, render_template_string
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 
-from .config import get_config
-from .core.logging_config import setup_logging
-from .api.routes import api_bp
-from .core.rate_limiter import IPRateLimiter
+# Importações comentadas temporariamente para execução direta
+# from .config import get_config
+# from .core.logging_config import setup_logging
+# from .api.routes import api_bp
+# from .core.rate_limiter import IPRateLimiter
 
 # Bibliotecas para conversão de documentos
 try:
@@ -55,6 +58,11 @@ try:
     from bs4 import BeautifulSoup
 except ImportError:
     BeautifulSoup = None
+
+try:
+    import magic
+except ImportError:
+    magic = None
 
 class ConversorUniversalMelhorado:
     """Classe principal para conversão de documentos com preservação de estrutura"""
@@ -647,14 +655,17 @@ class ConversorUniversalMelhorado:
 # Configuração da aplicação Flask
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
-app.config['UPLOAD_FOLDER'] = 'uploads'
+# Diretório de uploads (caminho absoluto dentro da pasta do backend)
+uploads_dir = os.path.join(app.root_path, 'uploads')
+app.config['UPLOAD_FOLDER'] = uploads_dir
+app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'docx', 'doc', 'txt', 'html', 'htm', 'md', 'markdown'}
 app.secret_key = 'sua_chave_secreta_aqui'
 
 # Configuração de CORS para permitir acesso do frontend
 CORS(app, resources={r"/converter": {"origins": "http://localhost:3000"}})
 
 # Cria diretório de upload se não existir
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(uploads_dir, exist_ok=True)
 
 # Instância global do conversor
 conversor = ConversorUniversalMelhorado()
@@ -706,48 +717,80 @@ def index():
 @app.route('/converter', methods=['POST'])
 def converter_arquivo():
     try:
+        print("[DEBUG] Iniciando conversão...")
+        
         if 'arquivo' not in request.files:
+            print("[DEBUG] Erro: Nenhum arquivo enviado")
             return jsonify({'erro': 'Nenhum arquivo enviado'}), 400
         
         arquivo = request.files['arquivo']
         formato_destino = request.form.get('formato_destino')
         
+        print(f"[DEBUG] Arquivo recebido: {arquivo.filename}")
+        print(f"[DEBUG] Formato destino: {formato_destino}")
+        
         if arquivo.filename == '':
+            print("[DEBUG] Erro: Nenhum arquivo selecionado")
             return jsonify({'erro': 'Nenhum arquivo selecionado'}), 400
 
         if not formato_destino:
+            print("[DEBUG] Erro: Formato de destino não especificado")
             return jsonify({'erro': 'Formato de destino não especificado'}), 400
 
         if not allowed_file(arquivo):
+            print("[DEBUG] Erro: Tipo de arquivo não permitido")
             return jsonify({'erro': 'Tipo de arquivo não permitido ou corrompido'}), 400
         
         # Salva arquivo temporário
         nome_arquivo = secure_filename(arquivo.filename)
         caminho_origem = os.path.join(app.config['UPLOAD_FOLDER'], nome_arquivo)
+        print(f"[DEBUG] Salvando arquivo em: {caminho_origem}")
         arquivo.save(caminho_origem)
         
         # Define nome do arquivo de destino
         nome_base = os.path.splitext(nome_arquivo)[0]
+        print(f"[DEBUG] Formatos suportados: {conversor.formatos_suportados}")
+        print(f"[DEBUG] Buscando formato: {formato_destino}")
+        
+        if formato_destino not in conversor.formatos_suportados:
+            print(f"[DEBUG] Erro: Formato {formato_destino} não encontrado")
+            return jsonify({'erro': f'Formato {formato_destino} não suportado'}), 400
+            
         extensao_destino = conversor.formatos_suportados[formato_destino][0]
         nome_destino = f"{nome_base}_convertido{extensao_destino}"
         caminho_destino = os.path.join(app.config['UPLOAD_FOLDER'], nome_destino)
         
-        # Realiza a conversão
-        sucesso = conversor.converter(caminho_origem, caminho_destino, formato_destino)
+        print(f"[DEBUG] Caminho destino: {caminho_destino}")
         
-        if sucesso:
+        # Realiza a conversão
+        print("[DEBUG] Iniciando conversão...")
+        sucesso = conversor.converter(caminho_origem, caminho_destino, formato_destino)
+        arquivo_existe = os.path.exists(caminho_destino)
+        print(f"[DEBUG] Resultado da conversão: {sucesso} | Arquivo existe: {arquivo_existe} | Caminho: {caminho_destino}")
+        
+        if sucesso and arquivo_existe:
+            print("[DEBUG] Conversão bem-sucedida, enviando arquivo")
             return send_file(caminho_destino, as_attachment=True, download_name=nome_destino)
+        elif sucesso and not arquivo_existe:
+            print("[DEBUG] Erro: Arquivo convertido não encontrado no caminho esperado")
+            return jsonify({'erro': 'Arquivo convertido não encontrado'}), 500
         else:
+            print("[DEBUG] Falha na conversão")
             return jsonify({'erro': 'Falha na conversão'}), 500
             
     except Exception as e:
+        print(f"[DEBUG] Exceção capturada: {type(e).__name__}: {str(e)}")
+        import traceback
+        print(f"[DEBUG] Stack trace: {traceback.format_exc()}")
         return jsonify({'erro': f'Erro interno: {str(e)}'}), 500
     finally:
         # Limpa arquivos temporários
         try:
             if 'caminho_origem' in locals():
+                print(f"[DEBUG] Removendo arquivo temporário: {caminho_origem}")
                 os.remove(caminho_origem)
-        except:
+        except Exception as cleanup_error:
+            print(f"[DEBUG] Erro na limpeza: {cleanup_error}")
             pass
 
 @app.route('/formatos')

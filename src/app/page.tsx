@@ -132,9 +132,12 @@ export default function ConversorPage() {
       formData.append('formato_destino', targetFormat)
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+      console.log('Fazendo requisição para:', `${apiUrl}/converter`)
+      
       const response = await fetch(`${apiUrl}/converter`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        // Não definir Content-Type para FormData - o browser define automaticamente
       })
 
       // Phase 2: Processing simulation
@@ -143,12 +146,38 @@ export default function ConversorPage() {
         await new Promise(resolve => setTimeout(resolve, 150))
       }
 
-      const data = await response.json()
+      console.log('Status da resposta:', response.status, response.statusText)
+      
+      if (!response.ok) {
+        // Se não for bem-sucedida, tenta ler como JSON para pegar a mensagem de erro
+        try {
+          const errorData = await response.json()
+          throw new Error(`Erro HTTP: ${response.status} - ${errorData.erro || response.statusText}`)
+        } catch (jsonError) {
+          throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`)
+        }
+      }
+
+      // Se chegou aqui, a resposta é bem-sucedida e contém o arquivo
+      const blob = await response.blob()
       setProgress(100)
 
-      if (data.sucesso) {
-        setLoadingStates({
-          upload: 'complete',
+      // Criar URL para download
+      const downloadUrl = window.URL.createObjectURL(blob)
+      const contentDisposition = response.headers.get('Content-Disposition')
+      const filename = contentDisposition?.split('filename=')[1] || `arquivo_convertido.${targetFormat}`
+      
+      // Fazer download automático
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(downloadUrl)
+
+      setLoadingStates({
+        upload: 'complete',
           processing: 'complete',
           download: 'ready'
         })
@@ -156,29 +185,26 @@ export default function ConversorPage() {
         setResult({
           success: true,
           message: 'Conversão realizada com sucesso!',
-          downloadUrl: `data:application/octet-stream;base64,${data.arquivo}`,
-          filename: data.nome_arquivo
+          downloadUrl: downloadUrl,
+          filename: filename
         })
         
-        toast.success('Documento convertido com sucesso! Clique no botão para baixar.', 'Conversão Concluída')
-      } else {
-        const errorMessage = data.erro || 'Erro na conversão.'
-        setLoadingStates({
-          upload: 'complete',
-          processing: 'error',
-          download: 'idle'
-        })
-        
-        setResult({
-          success: false,
-          message: errorMessage
-        })
-        
-        toast.error(errorMessage, 'Erro na Conversão')
-      }
+        toast.success('Documento convertido com sucesso! O download foi iniciado automaticamente.', 'Conversão Concluída')
     } catch (error) {
       console.error('Conversion error:', error)
-      const errorMessage = 'Erro de conexão. Verifique se o servidor Python está rodando.'
+      
+      let errorMessage = 'Erro desconhecido na conversão'
+      
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        errorMessage = 'Erro de conexão: Não foi possível conectar ao servidor. Verifique se o backend Flask está rodando na porta 5000.'
+      } else if (error instanceof Error) {
+        if (error.message.includes('HTTP:')) {
+          errorMessage = `Erro do servidor: ${error.message}`
+        } else {
+          errorMessage = `Erro: ${error.message}`
+        }
+      }
+      
       setLoadingStates({
         upload: 'error',
         processing: 'idle',
