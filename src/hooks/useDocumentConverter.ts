@@ -100,9 +100,11 @@ export const useDocumentConverter = () => {
       formData.append('file', file)
       formData.append('target_format', targetFormat)
 
-      // Make API request
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      const response = await fetch(`${apiUrl}/api/v1/convert`, {
+      // Construir endpoint da API
+      const endpoint = process.env.NEXT_PUBLIC_API_URL
+        ? `${process.env.NEXT_PUBLIC_API_URL}/converter`
+        : (process.env.NODE_ENV === 'development' ? 'http://localhost:5000/converter' : '/converter')
+      const response = await fetch(endpoint, {
         method: 'POST',
         body: formData
       })

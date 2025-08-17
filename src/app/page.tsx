@@ -131,10 +131,13 @@ export default function ConversorPage() {
       formData.append('arquivo', selectedFile)
       formData.append('formato_destino', targetFormat)
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      console.log('Fazendo requisição para:', `${apiUrl}/converter`)
+      // Construir endpoint da API
+      const endpoint = process.env.NEXT_PUBLIC_API_URL
+        ? `${process.env.NEXT_PUBLIC_API_URL}/converter`
+        : (process.env.NODE_ENV === 'development' ? 'http://localhost:5000/converter' : '/converter')
+      console.log('Fazendo requisição para:', endpoint)
       
-      const response = await fetch(`${apiUrl}/converter`, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         body: formData,
         // Não definir Content-Type para FormData - o browser define automaticamente
